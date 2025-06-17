@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="TiaFileFormatWasm/TiaFileFormatWasm.csproj" />
+  <Project Path="TiaFileFormatWasmHost/TiaFileFormatWasmHost.csproj">
+    <BuildDependency Project="TiaFileFormatWasm/TiaFileFormatWasm.csproj" />
+  </Project>
+</Solution>

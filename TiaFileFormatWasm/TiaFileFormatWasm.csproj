@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RollForward>LatestMajor</RollForward>
+
+        <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+        <WasmMainJSPath>main.js</WasmMainJSPath>
+
+        <!-- JSExport requires unsafe code -->
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+        <InvariantGlobalization>false</InvariantGlobalization>
+        <WasmEmitSymbolMap>true</WasmEmitSymbolMap>
+        <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+        <RunAOTCompilation>true</RunAOTCompilation>
+
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <BaseOutputPath>bin\</BaseOutputPath>
+        <OutputPath>bin\</OutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BouncyCastle.Cryptography" Version="2.6.1" />
+      <PackageReference Include="jfk-solutions.TiaFileFormat" Version="1.25.6.17" />
+      <PackageReference Include="SharpCompress" Version="0.40.0" />
+      <PackageReference Include="zlib.net-mutliplatform" Version="1.0.8" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <WasmExtraFilesToDeploy Include="index.html" />
+    </ItemGroup>
+</Project>

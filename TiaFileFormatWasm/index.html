@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>TIA Project Viewer</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 2em;
+        }
+
+        #drop-zone {
+            border: 2px dashed #888;
+            padding: 2em;
+            text-align: center;
+            color: #555;
+            margin-top: 1em;
+        }
+
+        #output {
+            white-space: pre-wrap;
+            margin-top: 1em;
+            background: #f4f4f4;
+            padding: 1em;
+            border: 1px solid #ccc;
+            max-height: 400px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Open TIA Project</h1>
+
+    <input type="file" id="fileInput">
+
+    <div id="drop-zone">Drop a TIA Project here</div>
+
+    <div id="output"></div>
+
+    <script type="module">
+        function renderFolder(fld, container) {
+            const li = document.createElement('li');
+            const span = document.createElement('span');
+            span.innerHTML = fld.Name;
+            li.appendChild(span);
+            if (fld.Children) {
+                const ul = document.createElement('ul');
+                li.appendChild(ul);
+                for (let c of fld.Children) {
+                    renderFolder(c, ul);
+                }
+            }
+
+            container.appendChild(li);
+        }
+
+        import { GetFolders } from './main.js';
+
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('drop-zone');
+        const output = document.getElementById('output');
+
+        function readFile(file) {
+            output.innerHTML = "loading...";
+
+            const reader = new FileReader();
+            reader.onloadend = (evt) => {
+                if (evt.target.readyState === FileReader.DONE) {
+                    const fileByteArray = [];
+
+                    const arrayBuffer = evt.target.result,
+                        array = new Uint8Array(arrayBuffer);
+                    for (const a of array) {
+                        fileByteArray.push(a);
+                    }
+
+                    var res = GetFolders(fileByteArray);
+                    console.log(res);
+
+                    output.innerHTML = "";
+
+                    const ul = document.createElement('ul');
+                    for (let fld of res.Folders) {
+                        renderFolder(fld, ul)
+                    }
+                    output.appendChild(ul);
+                }
+            }
+            reader.readAsArrayBuffer(file);
+        }
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) readFile(e.target.files[0]);
+        });
+
+        // Drag & Drop
+        dropZone.addEventListener('dragover', e => {
+            e.preventDefault();
+            dropZone.style.backgroundColor = '#eef';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.backgroundColor = '';
+        });
+
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            dropZone.style.backgroundColor = '';
+            if (e.dataTransfer.files.length > 0) readFile(e.dataTransfer.files[0]);
+        });
+    </script>
+</body>
+</html>
