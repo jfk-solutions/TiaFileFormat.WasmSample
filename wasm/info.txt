@@ -1,0 +1,7 @@
+Info:
+
+copy TiaFileFormat.wasm to TiaFileFormatWasm\bin\browser-wasm\AppBundle\_framework
+
+change line of "TiaFileFormat.wasm" in blazor.boot.json to:
+
+"TiaFileFormat.wasm": "sha256-hiQxWb9yoz5Bgy/Rf6A0LV1co1D25JYlWPzXvurraek=",
